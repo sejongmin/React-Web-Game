@@ -1,0 +1,31 @@
+.problem{
+    margin: 10px;
+    font-size: large;
+}
+
+form{
+    margin: 10px;
+}
+
+form .answer{
+    margin-top: 10px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input:focus{
+    outline: none;
+}
+
+
+.score{
+    margin: 10px 10px 0 10px;
+}
+
+.high_score{
+    margin: 0 10px 10px 10px;
+}

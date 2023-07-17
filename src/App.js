@@ -3,6 +3,7 @@ import {Link, Route, Routes} from "react-router-dom";
 import './App.css';
 import Tictactoe from './Tic-Tac-Toe/Tictactoe';
 import Gugudan from './Gugudan/Gugudan';
+import Followup from './Follow-Up/Followup';
 
 function App() {
   return (
@@ -10,16 +11,18 @@ function App() {
       <div className="Header">
         <h1>웹게임</h1>
         <ul>
-          <li><Link to="/">Home</Link></li>
           <li><Link to="/tictactoe">Tic-Tac-Toe</Link></li>
-          <li><Link to="/gugudan">Gu-Gu-Dan</Link></li>
+          <li><Link to="/gugudan">구구단</Link></li>
+          <li><Link to="/followup">끝말잇기</Link></li>
         </ul>
       </div>
-      <Routes>
-        <Route path="/" element={<span>환영합니다.</span>} />
-        <Route path="/tictactoe" element={<Tictactoe />} />
-        <Route path="/gugudan" element={<Gugudan />} />
-      </Routes>
+      <div className="game">
+        <Routes>
+          <Route path="/tictactoe" element={<Tictactoe />} />
+          <Route path="/gugudan" element={<Gugudan />} />
+          <Route path="/followup" element={<Followup />} />
+        </Routes>
+      </div>
     </div>
   );
 }
