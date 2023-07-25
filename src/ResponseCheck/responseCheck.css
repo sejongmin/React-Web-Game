@@ -1,0 +1,24 @@
+.ResponseCheck{
+    width: 100%;
+    height: 400px;
+}
+
+#screen{
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: large;
+    padding-top: 20px;
+}
+
+.waiting{
+    background-color: skyblue;
+}
+
+.ready{
+    background-color: red;
+}
+
+.now{
+    background-color: greenyellow;
+}

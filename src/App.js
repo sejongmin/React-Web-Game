@@ -4,6 +4,8 @@ import './App.css';
 import Tictactoe from './Tic-Tac-Toe/Tictactoe';
 import Gugudan from './Gugudan/Gugudan';
 import Followup from './Follow-Up/Followup';
+import Numberbaseball from './NumberBaseball/NumberBaseball';
+import ResponseCheck from './ResponseCheck/ResponseCheck';
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
           <li><Link to="/tictactoe">Tic-Tac-Toe</Link></li>
           <li><Link to="/gugudan">구구단</Link></li>
           <li><Link to="/followup">끝말잇기</Link></li>
+          <li><Link to="/numberbaseball">숫자야구</Link></li>
+          <li><Link to="/responsecheck">반응속도</Link></li>
         </ul>
       </div>
       <div className="game">
@@ -21,6 +25,8 @@ function App() {
           <Route path="/tictactoe" element={<Tictactoe />} />
           <Route path="/gugudan" element={<Gugudan />} />
           <Route path="/followup" element={<Followup />} />
+          <Route path="/numberbaseball" element={<Numberbaseball />} />
+          <Route path="/responsecheck" element={<ResponseCheck />} />
         </Routes>
       </div>
     </div>
