@@ -1,5 +1,6 @@
-import React, {useState, useRef, useEffect, useCallback} from "react";
+import React, {useState, useCallback} from "react";
 import './rockscissorspaper.css';
+import useInterval from './useInterval';
 
 const rspCoords = {
     바위: '0',
@@ -21,7 +22,7 @@ const RSP = () => {
     const [result, setResult] = useState('');
     const [imgCoord, setImgCoord] = useState(rspCoords.바위);
     const [score, setScore] = useState(0);
-    const interval = useRef();
+    const [isRunning, setIsRunning] = useState(true);
 
     const changeHand = useCallback(() => {
         if (imgCoord === rspCoords.바위){
@@ -33,30 +34,28 @@ const RSP = () => {
         }
     }, [imgCoord]);
 
-    useEffect(() => { //componentDidMount, componentDidUpdate 역할
-        interval.current = setInterval(changeHand, 100);
-        return () => { //componentWillUnmount 역할
-            clearInterval(interval.current);
-        }
-    }, [imgCoord, changeHand]);
+    useInterval(changeHand, isRunning ? 100 : null);
+
 
     const onClickBtn = (choice) => {
-        clearInterval(interval.current);
-        const myScore = scores[choice];
-        const cpuScore = scores[computerChoice(imgCoord)];
-        const diff = myScore - cpuScore;
-        if (diff === 0){
-            setResult('비겼습니다!');
-        } else if ([-1, 2].includes(diff)){
-            setResult('이겼습니다!');
-            setScore(score + 1);
-        } else {
-            setResult('졌습니다!');
-            setScore(score - 1);
+        if (isRunning){
+            setIsRunning(false);
+            const myScore = scores[choice];
+            const cpuScore = scores[computerChoice(imgCoord)];
+            const diff = myScore - cpuScore;
+            if (diff === 0){
+                setResult('비겼습니다!');
+            } else if ([-1, 2].includes(diff)){
+                setResult('이겼습니다!');
+                setScore(score + 1);
+            } else {
+                setResult('졌습니다!');
+                setScore(score - 1);
+            }
+            setTimeout(() => {
+                setIsRunning(true);
+            }, 1000);
         }
-        setTimeout(() => {
-            interval.current = setInterval(changeHand, 100);
-        }, 1000);
     }
 
     return(
