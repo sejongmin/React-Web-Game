@@ -7,6 +7,7 @@ import Followup from './Follow-Up/Followup';
 import Numberbaseball from './NumberBaseball/NumberBaseball';
 import ResponseCheck from './ResponseCheck/ResponseCheck';
 import RSP from './Rock-Scissors-Paper/RockScissorsPaper';
+import Lotto from './Lotto/Lotto';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <li><Link to="/numberbaseball">숫자야구</Link></li>
           <li><Link to="/responsecheck">반응속도</Link></li>
           <li><Link to="/rockscissorspaper">가위바위보</Link></li>
+          <li><Link to="/lotto">로또</Link></li>
         </ul>
       </div>
       <div className="game">
@@ -30,6 +32,7 @@ function App() {
           <Route path="/numberbaseball" element={<Numberbaseball />} />
           <Route path="/responsecheck" element={<ResponseCheck />} />
           <Route path="/rockscissorspaper" element={<RSP />} />
+          <Route path="/lotto" element={<Lotto />} />
         </Routes>
       </div>
     </div>
