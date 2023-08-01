@@ -8,6 +8,7 @@ import Numberbaseball from './NumberBaseball/NumberBaseball';
 import ResponseCheck from './ResponseCheck/ResponseCheck';
 import RSP from './Rock-Scissors-Paper/RockScissorsPaper';
 import Lotto from './Lotto/Lotto';
+import TTT from './TicTacToe/TicTacToe';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <li><Link to="/responsecheck">반응속도</Link></li>
           <li><Link to="/rockscissorspaper">가위바위보</Link></li>
           <li><Link to="/lotto">로또</Link></li>
+          <li><Link to="/ttt">틱택토</Link></li>
         </ul>
       </div>
       <div className="game">
@@ -33,6 +35,7 @@ function App() {
           <Route path="/responsecheck" element={<ResponseCheck />} />
           <Route path="/rockscissorspaper" element={<RSP />} />
           <Route path="/lotto" element={<Lotto />} />
+          <Route path="/ttt" element={<TTT />} />
         </Routes>
       </div>
     </div>
