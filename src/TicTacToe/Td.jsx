@@ -4,12 +4,11 @@ import './tictactoe.css';
 
 const Td = (props) => {
     const onClickTd = useCallback(() => {
-        console.log(props.rowIndex, props.cellIndex);
-        if(props.cellData){
+        console.log(props.rowIndex, props.cellIndex, props.cellData);
+        if (props.cellData){
             return;
         }
         props.dispatch({type:CLICK_CELL, row : props.rowIndex, cell : props.cellIndex});
-        props.dispatch({type:CHANGE_TURN});
     }, [props.cellData]);
 
     return(

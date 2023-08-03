@@ -4,7 +4,7 @@ import Td from './Td';
 const Tr = (props) => {
     return(
         <tr>
-            {Array(props.rowData.length).fill().map((td, i)=><Td rowIndex={props.rowIndex} cellIndex={i} dispatch={props.dispatch} cellData={props.rowdata[i]}/>)}
+            {Array(props.rowData.length).fill().map((td, i) => (<Td key={[props.rowIndex, i]} rowIndex={props.rowIndex} cellIndex={i} cellData={props.rowData[i]} dispatch={props.dispatch} />))}
         </tr>
     );
 }
