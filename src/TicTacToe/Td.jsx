@@ -1,19 +1,19 @@
-import React, {useCallback} from "react";
-import { CLICK_CELL, CHANGE_TURN } from "./TicTacToe";
+import React, {useCallback, memo} from "react";
+import { CLICK_CELL } from "./TicTacToe";
 import './tictactoe.css';
 
-const Td = (props) => {
+const Td = memo(({rowIndex, cellIndex, cellData, dispatch}) => {
     const onClickTd = useCallback(() => {
-        console.log(props.rowIndex, props.cellIndex, props.cellData);
-        if (props.cellData){
+        if (cellData){
             return;
+        } else{
+            dispatch({type:CLICK_CELL, row : rowIndex, cell : cellIndex});
         }
-        props.dispatch({type:CLICK_CELL, row : props.rowIndex, cell : props.cellIndex});
-    }, [props.cellData]);
+    }, [cellData]);
 
     return(
-        <td onClick={onClickTd}>{props.cellData}</td>
+        <td onClick={onClickTd}>{cellData}</td>
     );
-}
+});
 
 export default Td;

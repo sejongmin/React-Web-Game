@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer} from "react";
+import React, {useState, useEffect, useReducer, useRef, useCallback} from "react";
 import './tictactoe.css';
 import Table from './Table';
 
@@ -18,6 +18,7 @@ export const CLICK_CELL = 'CLICK_CELL';
 export const CHANGE_TURN = 'CHANGE_TURN';
 export const GAME_RESET = 'GAME_RESET';
 
+
 const reducer = (state, action) => {
     switch(action.type){
         case SET_WINNER:
@@ -26,13 +27,15 @@ const reducer = (state, action) => {
                 winner : action.winner
             };
         case CLICK_CELL:{
-            const tableData = [...state.tableData];
-            tableData[action.row] = [...tableData[action.row]];
-            tableData[action.row][action.cell] = state.turn;
-            return{
-                ...state,
-                tableData,
-                recentCell : [action.row, action.cell],
+            if (state.winner === ''){
+                const tableData = [...state.tableData];
+                tableData[action.row] = [...tableData[action.row]];
+                tableData[action.row][action.cell] = state.turn;
+                return{
+                    ...state,
+                    tableData,
+                    recentCell : [action.row, action.cell],
+                }
             }
         }
         case CHANGE_TURN:{
@@ -44,6 +47,7 @@ const reducer = (state, action) => {
         case GAME_RESET:{
             return{
                 ...state,
+                winner : '',
                 trun : 'O',
                 tableData : [
                     ['', '', ''],
@@ -58,6 +62,20 @@ const reducer = (state, action) => {
 
 const TTT = () => {
     const [state, dispatch] = useReducer(reducer, initialState);
+    const [restart, setRestart] = useState(0);
+    const setTime = useRef();
+    
+    const restartTimer = useCallback(() => {
+        setRestart(3);
+        setTime.current = setInterval(()=>{
+            setRestart((prevState)=>prevState - 1);
+        }, 1000)
+        setTimeout(()=>{
+            setRestart(0);
+            dispatch({type:GAME_RESET});
+            clearInterval(setTime.current);
+        }, 3000);
+    }, [state.winner]);
 
     useEffect(()=>{
         const [row, col] = state.recentCell;
@@ -76,10 +94,6 @@ const TTT = () => {
             win = true;
         }
 
-        if (win){
-            dispatch({type:SET_WINNER, winner: state.turn});
-
-        }
         let all = true;
         state.tableData.forEach((row)=>{
             row.forEach((cell)=>{
@@ -88,18 +102,24 @@ const TTT = () => {
                 }
             })
         })
-        if (all){
-            dispatch({type:GAME_RESET});
+
+        if (win){
+            dispatch({type:SET_WINNER, winner: state.turn});
+            restartTimer();
+        } else if (all){
+            dispatch({type:SET_WINNER, winner:'DRAW'});
+            restartTimer();
         } else {
             dispatch({type:CHANGE_TURN})
         }
     }, [state.recentCell]);
 
     return(
-        <>
-            <Table tableData={state.tableData} dispatch={dispatch} />
+        <div>
+            <Table tableData={state.tableData} dispatch={dispatch}/>
             {state.winner && <div>Winner : {state.winner}</div>}
-        </>
+            {restart > 0 && <div>{`${restart}초 후에 재시작 합니다.`}</div>}
+        </div>
     );
 }
 

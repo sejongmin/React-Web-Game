@@ -1,12 +1,12 @@
-import React from "react";
+import React, {memo} from "react";
 import Td from './Td';
 
-const Tr = (props) => {
+const Tr = memo(({rowIndex, rowData, dispatch}) => {
     return(
         <tr>
-            {Array(props.rowData.length).fill().map((td, i) => (<Td key={[props.rowIndex, i]} rowIndex={props.rowIndex} cellIndex={i} cellData={props.rowData[i]} dispatch={props.dispatch} />))}
+            {Array(3).fill().map((td, i) => (<Td key={i} rowIndex={rowIndex} cellIndex={i} cellData={rowData[i]} dispatch={dispatch}/>))}
         </tr>
     );
-}
+});
 
 export default Tr;

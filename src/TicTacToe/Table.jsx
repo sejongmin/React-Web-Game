@@ -1,10 +1,12 @@
 import React from "react";
 import Tr from './Tr';
 
-const Table = (props) => {
+const Table = ({tableData, dispatch}) => {
     return(
         <table>
-            {Array(props.tableData.length).fill().map((tr, i) => (<Tr key={i} rowIndex={i} rowData={props.tableData[i]} dispatch={props.dispatch}/>))}
+            <tbody>
+                {Array(3).fill().map((tr, i) => (<Tr key={i} rowIndex={i} rowData={tableData[i]} dispatch={dispatch}/>))}
+            </tbody>
         </table>
     );
 }
