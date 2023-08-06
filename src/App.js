@@ -9,6 +9,7 @@ import ResponseCheck from './ResponseCheck/ResponseCheck';
 import RSP from './Rock-Scissors-Paper/RockScissorsPaper';
 import Lotto from './Lotto/Lotto';
 import TTT from './TicTacToe/TicTacToe';
+import Minesearch from './MineSearch/MineSearch';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <li><Link to="/rockscissorspaper">가위바위보</Link></li>
           <li><Link to="/lotto">로또</Link></li>
           <li><Link to="/ttt">틱택토</Link></li>
+          <li><Link to="/minesearch">지뢰찾기</Link></li>
         </ul>
       </div>
       <div className="game">
@@ -36,6 +38,7 @@ function App() {
           <Route path="/rockscissorspaper" element={<RSP />} />
           <Route path="/lotto" element={<Lotto />} />
           <Route path="/ttt" element={<TTT />} />
+          <Route path="/minesearch" element={<Minesearch />} />
         </Routes>
       </div>
     </div>
