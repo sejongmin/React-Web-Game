@@ -1,23 +1,23 @@
-import React, {useState, useCallback, useContext} from "react";
+import React, {useState, useCallback, useContext, memo} from "react";
 import { TableContext, START_GAME } from './MineSearch';
 
-const Form = () => {
+const Form = memo(() => {
     const [row, setRow] = useState(10);
     const [col, setCol] = useState(10);
-    const [mine, setMine] = useState(10);
+    const [mine, setMine] = useState(20);
     const {dispatch} = useContext(TableContext);
 
     const onChangeRow = useCallback((e)=>{
-        setRow(e.targat.value);
-    }, []);
+        setRow(e.target.value);
+    }, [row]);
 
     const onChangeCol = useCallback((e)=>{
-        setCol(e.targat.value);
-    }, []);
+        setCol(e.target.value);
+    }, [col]);
 
     const onChangeMine = useCallback((e)=>{
-        setMine(e.targat.value);
-    }, []);
+        setMine(e.target.value);
+    }, [mine]);
     
     const onClickBtn = useCallback(() => {
         dispatch({type:START_GAME, row, col, mine});
@@ -31,6 +31,6 @@ const Form = () => {
             <button onClick={onClickBtn}>시작</button>
         </div>
     );
-}
+});
 
 export default Form;

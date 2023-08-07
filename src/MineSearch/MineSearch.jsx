@@ -1,4 +1,4 @@
-import React, {useReducer, createContext, useMemo, useCallback} from "react";
+import React, {useEffect, useReducer, createContext, useMemo, useCallback} from "react";
 import './minesearch.css';
 import Table from './Table';
 import Form from './Form';
@@ -22,13 +22,18 @@ export const TableContext = createContext({
 
 const initialState = {
     tableData:[],
+    data:{
+        row:0,
+        col:0,
+        mine:0,
+    },
     timer:0,
     result:'',
     halted: true,
+    openedCount:0,
 };
 
 const plantMine = (row, col, mine) => {
-    console.log(row, col, mine)
     const candidate = Array(row * col).fill().map((arr, i)=>{
         return i;
     })
@@ -61,33 +66,44 @@ export const CLICK_MINE = 'CLICK_MINE';
 export const FLAG_CELL = 'FLAG_CELL';
 export const QUESTION_CELL = 'QUESTION_CELL';
 export const NORMALIZE_CELL = 'NORMALIZE_CELL';
+export const INCREMENT_TIMER = 'INCREMENT_TIMER';
 
 const reducer = (state, action) => {
     switch(action.type){
         case START_GAME:
             return{
                 ...state,
+                data : {
+                    row : action.row,
+                    col : action.col,
+                    mine: action.mine,
+                },
                 tableData:plantMine(action.row, action.col, action.mine),
                 halted: false,
-            }
+                openedCount: 0,
+                timer: 0,
+                result: '',
+            };
         case OPEN_CELL:
             const tableData = [...state.tableData];
             tableData.forEach((row, i)=>{
                 tableData[i] = [...row];
             });
             const checked = [];
+            let openedCount = 0;
             const checkAround = (row, col) => {
+                if (row < 0 || row >= tableData.length || col < 0 || col >= tableData[0].length){
+                    return;
+                }
                 if ([CODE.OPENED, CODE.FLAG_MINE, CODE.FLAG, CODE.QUESTION, CODE.QUESTION_MINE].includes(tableData[row][col])){
                     return;
                 }
-                if (row < 0 || row > tableData.length || col < 0 || col > tableData[0].length){
-                    return;
-                }
-                if (checked.includes(row + '.' + col)){
+                if (checked.includes(row + '/' + col)){
                     return;
                 } else {
-                    checked.push(row + '.' + col);
+                    checked.push(row + '/' + col);
                 }
+                openedCount++;
                 let around = [tableData[row][col - 1], tableData[row][col + 1]];
                 if (tableData[row - 1]){
                     around = around.concat(
@@ -117,19 +133,27 @@ const reducer = (state, action) => {
                         near.push([row + 1, col - 1]);
                         near.push([row + 1, col]);
                         near.push([row + 1, col + 1]);
-                    }   
-                    near.forEach((n)=>{
-                        if (tableData[n[0]][n[1]] !== CODE.OPENED){
-                            checkAround(near[0], near[1]);
-                        }
-                    })
+                    }
+                    near.filter((n)=>([CODE.NORMAL].includes(tableData[n[0]][n[1]]))).forEach((n)=>{
+                        checkAround(n[0], n[1]);
+                    });
                 }
                 tableData[row][col] = count;
             };
             checkAround(action.row, action.col);
+            let halted = false;
+            let result = '';
+            console.log(state.data.row * state.data.col - state.data.mine, state.openedCount, openedCount);
+            if (state.data.row * state.data.col - state.data.mine === state.openedCount + openedCount){
+                halted = true;
+                result = `${state.timer}초만에 승리하셨습니다!`;
+            }
             return{
                 ...state,
                 tableData:tableData,
+                halted:halted,
+                result: result,
+                openedCount : state.openedCount + openedCount,
             };
         case CLICK_MINE:
             const tableData_1 = [...state.tableData];
@@ -176,6 +200,11 @@ const reducer = (state, action) => {
                 ...state,
                 tableData:tableData_4,
             };
+        case INCREMENT_TIMER:
+            return{
+                ...state,
+                timer: state.timer + 1,
+            }
         default:
             return state;
     }
@@ -184,6 +213,18 @@ const reducer = (state, action) => {
 const MineSearch = () => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const value = useMemo(()=>({tableData:state.tableData, halted:state.halted, dispatch}), [state.tableData, state.halted]);
+
+    useEffect(()=>{
+        let timer;
+        if (state.halted === false){
+            timer = setInterval(()=>{
+                dispatch({type:INCREMENT_TIMER});
+            }, 1000)
+            return() => {
+                clearInterval(timer);
+            };
+        }
+    }, [state.halted])
     return(
         <div>
             <TableContext.Provider value={value}>
