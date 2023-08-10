@@ -143,7 +143,6 @@ const reducer = (state, action) => {
             checkAround(action.row, action.col);
             let halted = false;
             let result = '';
-            console.log(state.data.row * state.data.col - state.data.mine, state.openedCount, openedCount);
             if (state.data.row * state.data.col - state.data.mine === state.openedCount + openedCount){
                 halted = true;
                 result = `${state.timer}초만에 승리하셨습니다!`;

@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useCallback} from 'react';
 import './gugudan.css';
 
 const High = (props) => {
@@ -36,11 +36,18 @@ const Gugudan = () => {
         inputRef.current.focus();
     }
 
+    const onChangeInput = useCallback((e) => {
+        setState({
+            ...state,
+            value: e.target.value,
+        })
+    }, [state.value]);
+
     return(
         <div className="gugudan">
             <div className='problem'>{state.first} X {state.second}</div>
             <form onSubmit = {check}>
-                <input ref={inputRef} type="number" value={state.value} onChange={(e)=>setState({...state, value : e.target.value})}/>
+                <input ref={inputRef} type="number" value={state.value} onChange={onChangeInput}/>
                 <button type="submit">CHECK</button>
                 <div className="answer"><strong>{state.result}</strong></div>
             </form>
