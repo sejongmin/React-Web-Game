@@ -1,4 +1,4 @@
-import React, {useReducer, createContext, useMemo} from "react";
+import React, {useReducer, createContext, useMemo, memo} from "react";
 import './tictactoe.css';
 import Board from './Board';
 
@@ -13,6 +13,7 @@ const initialState = {
 
 export const TableContext = createContext({
     squares : [],
+    winner : '',
     dispatch: ()=>{},
 });
 
@@ -45,7 +46,9 @@ const reducer = (state, action) => {
                     }
                 }
             }
-            return ;
+            return {
+                ...state,
+            };
         case CLICK_CELL:
             const history_1 = state.history.slice(0, state.stepNumber + 1);
             const current_1 = history_1[history_1.length - 1];
@@ -71,27 +74,29 @@ const reducer = (state, action) => {
     }
 };
 
-const Tictactoe = () => {
+const Tictactoe = memo(() => {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const value = useMemo(()=>({winner : state.winner, squares:state.history[state.stepNumber], dispatch}), [state.stepNumber, state.winner]);
-    
-    // const moves = state.history.map((step, move) => {
-    //     const desc = move ? 
-    //     'Go to move #' + move :
-    //     'Go to game start';
-    //     return (
-    //         <li key={move}>
-    //             <button onClick={dispatch({type : JUMP_TO, step:move})}>{desc}</button>
-    //         </li>
-    //     );
-    // });
+    const value = useMemo(()=>({winner : state.winner, squares:state.history[state.stepNumber], dispatch}), [state.winner, state.history[state.stepNumber], state.stepNumber]);
+
+    const moves = state.history.map((step, move) => {
+        const desc = move ? 
+        'Go to move #' + move :
+        'Go to game start';
+        return (
+            <li key={move}>
+                <button onClick={()=>{dispatch({type:JUMP_TO, step:move})}}>
+                    {desc}
+                </button>
+            </li>
+        );
+    });
 
     const result = () => {
         let status;
         if (state.winner){
             status = `winner is ${state.winner}`;
         } else{
-            status = `next is ${state.xIsNext}`;
+            status = `next is ${state.xIsNext ? 'X' : 'O'}`;
         }
         return(
             <div>{status}</div>
@@ -106,12 +111,12 @@ const Tictactoe = () => {
                     <Board />
                 </div>
                 <div className="game-info">
-                    {result}
-                    {/* <ol>{moves}</ol> */}
+                    {result()}
+                    <ol>{moves}</ol>
                 </div>
             </TableContext.Provider>
         </div>
     );
-}
+});
 
 export default Tictactoe;

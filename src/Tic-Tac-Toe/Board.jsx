@@ -1,11 +1,9 @@
-import React, {useContext} from "react";
+import React, {useContext, memo} from "react";
 import Square from "./Square";
 import { TableContext } from "./Tictactoe";
+import './tictactoe.css';
 
-const Board = () => {
-    const {dispatch, squares, winner} = useContext(TableContext);
-    console.log(squares);
-    console.log(winner);
+const Board = memo(() => {
     return(
     <div>
         <div className="border-row">
@@ -25,6 +23,6 @@ const Board = () => {
         </div>
     </div>
     );
-};
+});
 
 export default Board;
